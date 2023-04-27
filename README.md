@@ -2,7 +2,7 @@
 
 一个摄像头软件
 
-## Project Setup
+## 项目安装
 
 ### Install
 
@@ -10,13 +10,13 @@
 $ npm install
 ```
 
-### Development
+### 开发启动
 
 ```bash
 $ npm run dev
 ```
 
-### Build
+### 打包
 
 ```bash
 # For windows
