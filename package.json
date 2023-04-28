@@ -1,6 +1,6 @@
 {
   "name": "mycamera",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "一个摄像头软件",
   "main": "./out/main/index.js",
   "author": "seven",
