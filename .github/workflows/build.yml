@@ -55,17 +55,17 @@ jobs:
       - name: Cleanup Artifacts for Windows
         if: matrix.os == 'windows-latest'
         run: |
-          npx del-cli "dist/*" "!dist/*.exe" "!dist/*.zip" "!dist/*.yml"
+          npx rimraf "dist/*" "!dist/*.exe" "!dist/*.zip" "!dist/*.yml"
 
       - name: Cleanup Artifacts for MacOS
         if: matrix.os == 'macos-latest'
         run: |
-          npx del "dist/*" "!dist/(*.dmg|*.zip|latest*.yml)"
+          npx rimraf "dist/*" "!dist/(*.dmg|*.zip|latest*.yml)"
 
       # - name: Cleanup Artifacts for Linux
       #   if: matrix.os == 'ubuntu-latest'
       #   run: |
-      #     npx del "dist/*" "!dist/(*.AppImage.*|latest*.yml|*.appimage.*)"
+      #     npx rimraf "dist/*" "!dist/(*.AppImage.*|latest*.yml|*.appimage.*)"
 
       - name: upload artifacts
         uses: actions/upload-artifact@v3.0.0
