@@ -28,43 +28,45 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm install
+          npm i -g pnpm
+          pnpm install
 
       - name: Build Electron App for windows
         if: matrix.os == 'windows-latest'
-        run: npm run pack:win
+        run: pnpm run pack:win
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Build Electron App for macos
         if: matrix.os == 'macos-latest'
         run: |
-          npm run pack:mac-x86
-          npm run pack:mac-arm64
+          pnpm run pack:mac-x86
+          pnpm run pack:mac-arm64
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-      - name: Build Electron App for linux
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-         npm run pack:linux
-         env:
-         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      # - name: Build Electron App for linux
+      #   if: matrix.os == 'ubuntu-latest'
+      #   run: |
+      #     pnpm run pack:linux-x86
+      #     pnpm run pack:linux-arm64
+      # env:
+      #   GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Cleanup Artifacts for Windows
         if: matrix.os == 'windows-latest'
         run: |
-          npx del-cli "dist/!(*.exe|*.dmg|latest*.yml)"
+          npx del-cli "dist/*" "!dist/*.exe" "!dist/*.zip" "!dist/*.yml"
 
       - name: Cleanup Artifacts for MacOS
         if: matrix.os == 'macos-latest'
         run: |
-          npx del "dist/!(*.exe|*.dmg|latest*.yml)"
+          npx del "dist/*" "!dist/(*.dmg|*.zip|latest*.yml)"
 
       - name: Cleanup Artifacts for Linux
         if: matrix.os == 'ubuntu-latest'
         run: |
-         npx del "dist/!(*.exe|*.dmg|latest*.yml)"
+          npx del "dist/*" "!dist/(*.AppImage.*|latest*.yml|*.appimage.*)"
 
       - name: upload artifacts
         uses: actions/upload-artifact@v3.0.0
@@ -78,4 +80,4 @@ jobs:
         with:
           files: 'dist/**'
         env:
-          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
