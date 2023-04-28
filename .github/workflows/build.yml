@@ -28,44 +28,43 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm i -g pnpm
-          pnpm install
+          npm install
 
       - name: Build Electron App for windows
         if: matrix.os == 'windows-latest'
-        run: pnpm run pack:win
+        run: npm run pack:win
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Build Electron App for macos
         if: matrix.os == 'macos-latest'
         run: |
-          pnpm run pack:mac-x86
-          pnpm run pack:mac-arm64
+          npm run pack:mac-x86
+          npm run pack:mac-arm64
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-      # - name: Build Electron App for linux
-      #   if: matrix.os == 'ubuntu-latest'
-      #   run: |
-      #     pnpm run pack:linux
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      - name: Build Electron App for linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+         npm run pack:linux
+         env:
+         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Cleanup Artifacts for Windows
         if: matrix.os == 'windows-latest'
         run: |
-          npx rimraf "dist/*" "!dist/*.exe" "!dist/*.zip" "!dist/*.yml"
+          npx del-cli "dist/!(*.exe|*.dmg|latest*.yml)"
 
       - name: Cleanup Artifacts for MacOS
         if: matrix.os == 'macos-latest'
         run: |
-          npx rimraf "dist/*" "!dist/(*.dmg|*.zip|latest*.yml)"
+          npx del "dist/!(*.exe|*.dmg|latest*.yml)"
 
-      # - name: Cleanup Artifacts for Linux
-      #   if: matrix.os == 'ubuntu-latest'
-      #   run: |
-      #     npx rimraf "dist/*" "!dist/(*.AppImage.*|latest*.yml|*.appimage.*)"
+      - name: Cleanup Artifacts for Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+         npx del "dist/!(*.exe|*.dmg|latest*.yml)"
 
       - name: upload artifacts
         uses: actions/upload-artifact@v3.0.0
